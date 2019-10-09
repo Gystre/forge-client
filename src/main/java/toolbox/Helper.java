@@ -1,17 +1,30 @@
-package Main;
+package toolbox;
 
 import com.google.common.base.Strings;
-import net.minecraft.client.Minecraft;
+
+import mod.loader.ModManager;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import org.apache.logging.log4j.Logger;
+
 
 import java.util.Scanner;
 
-public class Helper {
+public class Helper implements Globals{
+
     public static EntityPlayerSP getLocalPlayer() {
-        return Minecraft.getMinecraft().player;
+        return MC.player;
+    }
+
+    public static WorldClient getWorld(){
+        return MC.world;
+    }
+
+    public static ModManager getModManager() {
+        return ModManager.getInstance();
     }
 
     public static void printMessageNaked(String startWith, String message, Style firstStyle, Style secondStyle) {

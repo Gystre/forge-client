@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "kyle-forge-client",
+  "name": "Yellow Giraffe",
+  "description": "Pretty cool forge client",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://github.com/Gystre/forge-client",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["Kyle"],
+  "credits": "fast mans",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
