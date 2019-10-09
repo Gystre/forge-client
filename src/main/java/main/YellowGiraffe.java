@@ -35,6 +35,7 @@ public class YellowGiraffe {
     public void init(FMLInitializationEvent event) {
         if(event.getSide() == Side.CLIENT){
             getModManager().forEach(BaseMod::load);
+            //getModManager().get("jesus").get().enable();
         }
     }
 }
