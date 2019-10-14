@@ -34,27 +34,20 @@ public class ToggleMod extends BaseMod {
         return false;
     }
 
-    /**
-     * Check if the mod is currently enabled
-     */
     @Override
     public final boolean isEnabled() {
         return enabled;
     }
 
     @Override
-    protected void onLoad() {
-    }
+    protected void onLoad() { }
 
     @Override
-    protected void onUnload() {
-    }
+    protected void onUnload() { }
 
     @Override
-    protected void onEnabled() {
-    }
+    protected void onEnabled() { }
 
     @Override
-    protected void onDisabled() {
-    }
+    protected void onDisabled() { }
 }

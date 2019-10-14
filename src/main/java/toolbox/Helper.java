@@ -27,6 +27,10 @@ public class Helper implements Globals{
         return ModManager.getInstance();
     }
 
+    public static Logger getLogger(){
+        return LOGGER;
+    }
+
     public static void printMessageNaked(String startWith, String message, Style firstStyle, Style secondStyle) {
         if (!Strings.isNullOrEmpty(message)) {
             if (message.contains("\n")) {

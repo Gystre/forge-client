@@ -8,6 +8,7 @@ import events.LocalPlayerUpdateEvent;
 import mod.BaseMod;
 import mod.Category;
 import mod.ToggleMod;
+import mod.loader.RegisterMod;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
@@ -16,9 +17,13 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import packet.Connection;
+import packet.PacketOutputListener;
 import toolbox.EntityUtils;
 
+@RegisterMod
 public class Jesus extends ToggleMod {
     private static final AxisAlignedBB WATER_WALK_AA = new AxisAlignedBB(0.D, 0.D, 0.D, 1.D, 0.99D, 1.D);
 
@@ -27,11 +32,13 @@ public class Jesus extends ToggleMod {
     }
 
     @SubscribeEvent
-    public void onLocalPlayerUpdate(LocalPlayerUpdateEvent event) {
+    public static void onLocalPlayerUpdate(LocalPlayerUpdateEvent event) {
         //if (!getModManager().get(FreecamMod.class).map(BaseMod::isEnabled).orElse(false)) {
             if (isInWater(getLocalPlayer()) && !getLocalPlayer().isSneaking()) {
+                //move player up
                 getLocalPlayer().motionY = 0.1;
                 if (getLocalPlayer().getRidingEntity() != null && !(getLocalPlayer().getRidingEntity() instanceof EntityBoat)) {
+                    //move player's riding entity up
                     getLocalPlayer().getRidingEntity().motionY = 0.3;
                 }
             }
@@ -39,7 +46,7 @@ public class Jesus extends ToggleMod {
     }
 
     @SubscribeEvent
-    public void onAddCollisionBox(AddCollisionBoxToListEvent event) {
+    public static void onAddCollisionBox(AddCollisionBoxToListEvent event) {
         if (getLocalPlayer() != null
                 && (event.getBlock() instanceof BlockLiquid)
                 && (EntityUtils.isDrivenByPlayer(event.getEntity())
@@ -59,20 +66,39 @@ public class Jesus extends ToggleMod {
         }
     }
 
-//    @SubscribeEvent
-//    public void onPacketSending(Packet event) {
-//        if (event instanceof CPacketPlayer) {
-//            if (isAboveWater(getLocalPlayer(), true)
-//                    && !isInWater(getLocalPlayer())
-//                    && !isAboveLand(getLocalPlayer())) {
-//                int ticks = getLocalPlayer().ticksExisted % 2;
-//                double y = FastReflection.Fields.CPacketPlayer_y.get(event);
-//                if (ticks == 0) {
-//                    FastReflection.Fields.CPacketPlayer_y.set(event.getPacket(), y + 0.02D);
-//                }
-//            }
-//        }
-//    }
+    @SubscribeEvent
+    public static void onPacketSending(PacketOutputListener.PacketOutputEvent event) {
+        CPacketPlayer packet = (CPacketPlayer)event.getPacket();
+
+        if (event.getPacket() instanceof CPacketPlayer) {
+            if (isAboveWater(getLocalPlayer(), true)
+                    && !isInWater(getLocalPlayer())
+                    && !isAboveLand(getLocalPlayer())) {
+                int ticks = getLocalPlayer().ticksExisted % 2;
+                // get position
+                double x = packet.getX(0);
+                double y = packet.getY(0);
+                double z = packet.getZ(0);
+                if (ticks == 0) {
+                    y -= 0.05;
+
+                }else{
+                    y += 0.05;
+                }
+
+                // create new packet
+                Packet newPacket;
+                if(packet instanceof CPacketPlayer.Position)
+                    newPacket = new CPacketPlayer.Position(x, y, z, true);
+                else
+                    newPacket = new CPacketPlayer.PositionRotation(x, y, z, packet.getYaw(0), packet.getPitch(0), true);
+
+                // send new packet
+                Connection.sendPacket(newPacket);
+            }
+        }
+
+    }
 
     @SuppressWarnings("deprecation")
     private static boolean isAboveLand(Entity entity) {
