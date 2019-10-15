@@ -1,5 +1,6 @@
 package main;
 
+import console.ConsoleIO;
 import features.Test;
 import mod.BaseMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,7 +25,6 @@ public class YellowGiraffe {
         if(event.getSide() == Side.CLIENT){
             getLogger().info("hello from the console!");
             getModManager().init();
-            getModManager().mods.get(0).enable();
 //            Test test = new Test();
 //            MinecraftForge.EVENT_BUS.register(test.getClass());
         }

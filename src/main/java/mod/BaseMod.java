@@ -30,6 +30,7 @@ public abstract class BaseMod implements Globals {
     public final boolean register() {
         if (!registered) {
             MinecraftForge.EVENT_BUS.register(this);
+            LOGGER.info("registered " + modName);
             registered = true;
             return true;
         } else {

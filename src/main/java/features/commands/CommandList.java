@@ -16,8 +16,7 @@ public final class CommandList {
     private static IForgeRegistry<Command> registry;
     {
         if(registry != null)
-            throw new IllegalStateException(
-                    "Multiple instances of CommandList!");
+            throw new IllegalStateException("Multiple instances of CommandList!");
 
         RegistryBuilder<Command> registryBuilder = new RegistryBuilder<>();
         registryBuilder.setName(new ResourceLocation(YellowGiraffe.MODID, "cmds"));
@@ -26,8 +25,7 @@ public final class CommandList {
         registry = registryBuilder.create();
     }
 
-    protected final <T extends Command> T register(T cmd)
-    {
+    protected final <T extends Command> T register(T cmd) {
         cmd.setRegistryName(YellowGiraffe.MODID, cmd.getName().toLowerCase());
         registry.register(cmd);
         return cmd;
@@ -39,8 +37,7 @@ public final class CommandList {
     }
 
     @SuppressWarnings("deprecation")
-    public final Collection<Command> getValues()
-    {
+    public final Collection<Command> getValues() {
         try
         {
             return registry.getValuesCollection();
@@ -53,8 +50,7 @@ public final class CommandList {
 
     public final Command get(String name)
     {
-        ResourceLocation location =
-                new ResourceLocation(YellowGiraffe.MODID, name.toLowerCase());
+        ResourceLocation location = new ResourceLocation(YellowGiraffe.MODID, name.toLowerCase());
         return registry.getValue(location);
     }
 }

@@ -3,6 +3,7 @@ package mod.loader;
 import com.google.common.collect.Sets;
 import features.Jesus;
 import features.Test;
+import features.commands.ChatCommand;
 import mod.BaseMod;
 import net.minecraftforge.common.MinecraftForge;
 import toolbox.Globals;
@@ -23,12 +24,16 @@ public class ModManager implements Globals {
     }
 
     public static void init(){
+        mods.add(new ChatCommand());
+        mods.add(new Test());
         mods.add(new Jesus());
 
 
-        for(int i = 0; i < mods.size(); i++) {
-            mods.get(i).register();
-            LOGGER.info("registered " + mods.get(i).getModName());
+
+
+        for(BaseMod mod : mods) {
+            MinecraftForge.EVENT_BUS.register(mod.getClass());
+            LOGGER.info("registered " + mod.getModName());
         }
     }
 
