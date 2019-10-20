@@ -24,111 +24,41 @@ public abstract class BaseMod implements Globals {
         this.modDescription = Strings.EMPTY;
     }
 
-    /**
-     * Register event to forge bus
-     */
-    public final boolean register() {
-        if (!registered) {
+    public void register(){
+        if(!registered) {
             MinecraftForge.EVENT_BUS.register(this);
-            LOGGER.info("registered " + modName);
             registered = true;
-            return true;
-        } else {
-            return false;
+            LOGGER.info(modName + " registered");
         }
     }
 
-    /**
-     * Unregister event on forge bus
-     */
-    public final boolean unregister() {
-        if (registered) {
+    public void unregister(){
+        if(registered){
             MinecraftForge.EVENT_BUS.unregister(this);
             registered = false;
-            return true;
-        } else {
-            return false;
+            LOGGER.info(modName + " unregistered");
         }
     }
 
-    /**
-     * Load the mod
-     */
-    public final void load() {
-        if (isEnabled()) {
-            start();
-        }
-        onLoad();
+    public void start(){
+        enable();
+        LOGGER.info("started " + modName);
     }
 
-    /**
-     * Unload the mod
-     */
-    public final void unload() {
-        stop();
-        onUnload();
+    public void stop(){
+        disable();
+        LOGGER.info("stopped " + modName);
     }
 
-    /**
-     * Enables the mod
-     */
-    protected final void start() {
-        if (register()) {
-            onEnabled();
-            LOGGER.info(String.format("%s enabled", getModName()));
-        }
-    }
-
-    protected final void stop() {
-        if (unregister()) {
-            onDisabled();
-            LOGGER.info(String.format("%s disabled", getModName()));
-        }
-    }
-
-    public void enable() {
-        start();
-    }
-
-    public void disable() {
-        stop();
-    }
-
-    /**
-     * Check if the mod is hidden DEFAULT: true
-     */
-    public abstract boolean isHidden();
-
-    /**
-     * Check if the mod is enabled
-     */
+    protected abstract void enable();
+    protected abstract void disable();
     public abstract boolean isEnabled();
 
-    /**
-     * Called when the mod is loaded
-     */
-    protected abstract void onLoad();
-
-    /**
-     * Called when unloaded
-     */
-    protected abstract void onUnload();
-
-    /**
-     * Called when the mod is enabled
-     */
-    protected abstract void onEnabled();
-
-    /**
-     * Called when the mod is disabled
-     */
-    protected abstract void onDisabled();
-
-    public final String getModName() {
+    public static String getModName() {
         return modName;
     }
 
-    public final String getModDescription() {
+    public static String getModDescription() {
         return modDescription;
     }
 
@@ -136,12 +66,7 @@ public abstract class BaseMod implements Globals {
         return category;
     }
 
-    public final boolean isRegistered() {
+    public boolean isRegistered() {
         return registered;
-    }
-
-    @Override
-    public String toString() {
-        return getModName() + ": " + getModDescription();
     }
 }

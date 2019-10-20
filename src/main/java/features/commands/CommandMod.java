@@ -1,34 +1,14 @@
 package features.commands;
 
-import toolbox.Helper;
+import console.ConsoleIO;
+import mod.ServiceMod;
 
-public abstract class Command extends ForgeRegistryEntry<Command>{
-    private final String name;
-    private final String description;
+public abstract class CommandMod extends ServiceMod {
     private final String[] syntax;
 
-    public Command(String name, String description, String... syntax)
-    {
-        this.name = name;
-        this.description = description;
+    public CommandMod(String name, String desc, String... syntax) {
+        super(name, desc);
         this.syntax = syntax;
-    }
-
-    public abstract void call(String[] args) throws CmdException;
-
-    public final String getName()
-    {
-        return name;
-    }
-
-    public final String getDescription()
-    {
-        return description;
-    }
-
-    public final String[] getSyntax()
-    {
-        return syntax;
     }
 
     public abstract class CmdException extends Exception
@@ -56,7 +36,7 @@ public abstract class Command extends ForgeRegistryEntry<Command>{
         @Override
         public void printToChat()
         {
-            Helper.printMessageNaked(getMessage());
+            ConsoleIO.error(getMessage());
         }
     }
 
@@ -76,10 +56,25 @@ public abstract class Command extends ForgeRegistryEntry<Command>{
         public void printToChat()
         {
             if(getMessage() != null)
-                Helper.printMessageNaked("\u00a74Syntax error:\u00a7r " + getMessage());
+                ConsoleIO.error("\u00a74Syntax error:\u00a7r " + getMessage());
 
             for(String line : syntax)
-                Helper.printMessageNaked(line);
+                ConsoleIO.error(line);
         }
+    }
+
+    @Override
+    public void enable(){
+        try {
+            call();
+        } catch (CmdException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public abstract void call() throws CmdException;
+
+    public String[] getSyntax() {
+        return syntax;
     }
 }

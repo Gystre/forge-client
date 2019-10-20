@@ -6,9 +6,8 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import toolbox.Helper;
 
-//parently there a mem leak somewhere here :P
-
 public class ConsoleIO {
+
     public static final Style HEADING = new Style().setColor(TextFormatting.GRAY).setItalic(true);
 
     private static final ThreadLocal<AtomicInteger> INDENTATION = new ThreadLocal<>();
@@ -28,12 +27,17 @@ public class ConsoleIO {
     }
 
     public static void write(String msg, Style style) {
-        String tab = Strings.repeat('>', Math.max(getOrCreate().get(), MIN_INDENT)) + " ";
+        String tab = Strings.repeat(':', Math.max(getOrCreate().get(), MIN_INDENT)) + " ";
         if (style == null) {
-            Helper.printMessageNaked(tab, msg); // TODO: use a non-chat console
+            Helper.printMessageNaked("[YG]" + tab, msg); // TODO: use a non-chat console
         } else {
-            Helper.printMessageNaked(tab, msg, style); // TODO: use a non-chat console
+            Helper.printMessageNaked("[YG]" + tab, msg, style); // TODO: use a non-chat console
         }
+    }
+
+    public static void error(String msg){
+        String tab = Strings.repeat(':', Math.max(getOrCreate().get(), MIN_INDENT)) + " ";
+        Helper.printMessageNaked("[YG]" + tab, msg, new Style().setColor(TextFormatting.RED));
     }
 
     public static void write(String msg) {
