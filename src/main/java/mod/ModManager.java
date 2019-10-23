@@ -1,9 +1,8 @@
 package mod;
 
 import event.EventHandlers;
-import features.Test;
+import features.FullBright;
 import features.commands.ChatListener;
-import features.commands.CommandMod;
 import features.commands.Help;
 import net.minecraftforge.common.MinecraftForge;
 import toolbox.Globals;
@@ -18,16 +17,14 @@ public class ModManager implements Globals {
     public static void init(){
         mods = new ArrayList<>();
 
-        mods.add(new Test());
+        //actual mods
+        mods.add(new FullBright());
         mods.add(new Help());
 
-        Collections.sort(mods, new Comparator<BaseMod>() {
-            @Override
-            public int compare(BaseMod o1, BaseMod o2) {
-                return o1.getModName().compareTo(o2.getModName());
-            }
-        });
+        //sort to prepare for binary search later
+        Collections.sort(mods, Comparator.comparing(BaseMod::getModName));
 
+        //misc stuff
         MinecraftForge.EVENT_BUS.register(new EventHandlers());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
     }

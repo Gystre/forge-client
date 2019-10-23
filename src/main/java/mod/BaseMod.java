@@ -2,11 +2,12 @@ package mod;
 
 import joptsimple.internal.Strings;
 import net.minecraftforge.common.MinecraftForge;
-import toolbox.Globals;
 
-public abstract class BaseMod implements Globals {
-    private static String modName;
-    private static String modDescription;
+import static toolbox.Helper.getLogger;
+
+public abstract class BaseMod {
+    private String modName;
+    private String modDescription;
     private final Category category;
 
     // is the mod registered on the forge bus?
@@ -28,7 +29,7 @@ public abstract class BaseMod implements Globals {
         if(!registered) {
             MinecraftForge.EVENT_BUS.register(this);
             registered = true;
-            LOGGER.info(modName + " registered");
+            getLogger().info(modName + " registered");
         }
     }
 
@@ -36,29 +37,30 @@ public abstract class BaseMod implements Globals {
         if(registered){
             MinecraftForge.EVENT_BUS.unregister(this);
             registered = false;
-            LOGGER.info(modName + " unregistered");
+            getLogger().info(modName + " unregistered");
         }
     }
 
     public void start(){
         enable();
-        LOGGER.info("started " + modName);
+        getLogger().info("started " + modName);
     }
 
     public void stop(){
         disable();
-        LOGGER.info("stopped " + modName);
+        getLogger().info("stopped " + modName);
     }
 
-    protected abstract void enable();
-    protected abstract void disable();
+    //register and unregister handled in abstract functions
+    public abstract void enable();
+    public abstract void disable();
     public abstract boolean isEnabled();
 
-    public static String getModName() {
+    public String getModName() {
         return modName;
     }
 
-    public static String getModDescription() {
+    public String getModDescription() {
         return modDescription;
     }
 

@@ -1,13 +1,14 @@
 package features.commands;
 
 import console.ConsoleIO;
-import mod.ServiceMod;
+import mod.BaseMod;
+import mod.Category;
 
-public abstract class CommandMod extends ServiceMod {
+public abstract class CommandMod extends BaseMod {
     private final String[] syntax;
 
     public CommandMod(String name, String desc, String... syntax) {
-        super(name, desc);
+        super(Category.SERVICE, name, desc);
         this.syntax = syntax;
     }
 
@@ -63,14 +64,23 @@ public abstract class CommandMod extends ServiceMod {
         }
     }
 
+    //all commands start not enabled so when user accesses them they become active
     @Override
-    public void enable(){
+    public boolean isEnabled(){
+        return false;
+    }
+
+    @Override
+    public void enable() {
         try {
             call();
         } catch (CmdException e) {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void disable(){ }
 
     public abstract void call() throws CmdException;
 

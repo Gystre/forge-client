@@ -13,6 +13,6 @@ public class Help extends CommandMod {
 //        if(args.length > 1)
 //            throw new CmdSyntaxError();
 
-        ConsoleIO.write("do: .commandname args");
+        ConsoleIO.write("do: .name args");
     }
 }
